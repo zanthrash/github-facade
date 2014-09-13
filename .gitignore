@@ -1,0 +1,5 @@
+application.yml
+!src/**/application.yml
+*.iml
+*.ipr
+*.iws
