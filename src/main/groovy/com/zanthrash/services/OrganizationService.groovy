@@ -16,25 +16,17 @@ import org.springframework.web.util.UriComponentsBuilder
 class OrganizationService {
 
     @Autowired
-    GitHubProperties gitHubProperties
+    public RestTemplate restTemplate
 
     List getRepos(String organizationName) {
-        RestTemplate restTemplate = new RestTemplate()
-        HttpEntity requestEntity = getRequestEntity(getRequestHeaders())
         URI endpoint = createUriForOrganizatoinsRepos(organizationName)
 
-        ResponseEntity<Repo[]> response = restTemplate.exchange(
+        ResponseEntity<Repo[]> response = restTemplate.getForEntity(
                 endpoint,
-                HttpMethod.GET,
-                requestEntity,
                 Repo[].class,
         )
 
-       response.body.toList().each {
-           println it.toString()
-       }
-
-       response.body.toList()
+        response.body.toList()
     }
 
     URI createUriForOrganizatoinsRepos(String organizationName) {
@@ -47,19 +39,6 @@ class OrganizationService {
         URI uri = uriComponents.toUri()
         uri
     }
-
-
-    HttpEntity getRequestEntity(HttpHeaders requestHeaders) {
-        HttpEntity requestEntity = new HttpEntity(requestHeaders)
-        requestEntity
-    }
-
-    HttpHeaders getRequestHeaders() {
-        HttpHeaders requestHeaders = new HttpHeaders()
-        requestHeaders.set("Authorization", "token ${gitHubProperties.token}")
-        requestHeaders
-    }
-
 
 
 }
