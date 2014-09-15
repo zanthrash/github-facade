@@ -44,13 +44,13 @@ class OrganizationServiceSpec extends Specification {
         and: "create our fake response of 5 repos"
             List repos = []
             5.times { repos << [name: "repo_$it", owner:[login: orginazationName]]}
-            def expedtedJson = new JsonBuilder(repos)
+            def expectedJson = new JsonBuilder(repos)
 
 
         and: "wire up the fake backend service"
             mockGitHub
                     .expect(requestTo("https://api.github.com/orgs/$orginazationName/repos"))
-                    .andRespond(withSuccess(expedtedJson.toString(), MediaType.APPLICATION_JSON))
+                    .andRespond(withSuccess(expectedJson.toString(), MediaType.APPLICATION_JSON))
 
         when:
             List results = service.getRepos(orginazationName)

@@ -2,6 +2,7 @@ package com.zanthrash.services
 
 import com.zanthrash.config.GitHubProperties
 import com.zanthrash.domain.Repo
+import com.zanthrash.utils.EndpointFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
@@ -16,10 +17,14 @@ import org.springframework.web.util.UriComponentsBuilder
 class OrganizationService {
 
     @Autowired
-    public RestTemplate restTemplate
+    RestTemplate restTemplate
+
+    @Autowired
+    EndpointFactory endpointFactory
+
 
     List getRepos(String organizationName) {
-        URI endpoint = createUriForOrganizatoinsRepos(organizationName)
+        URI endpoint = endpointFactory.organizationRepoURL(organizationName)
 
         ResponseEntity<Repo[]> response = restTemplate.getForEntity(
                 endpoint,
@@ -27,17 +32,6 @@ class OrganizationService {
         )
 
         response.body.toList()
-    }
-
-    URI createUriForOrganizatoinsRepos(String organizationName) {
-        UriComponents uriComponents = UriComponentsBuilder.newInstance()
-            .scheme("https")
-            .host("api.github.com")
-            .path("orgs/{orgName}/repos")
-            .buildAndExpand(organizationName)
-
-        URI uri = uriComponents.toUri()
-        uri
     }
 
 
