@@ -8,4 +8,5 @@ import groovy.transform.ToString
 class Repo {
     Owner owner
     String name
+    List<PullRequest> pullRequests
 }

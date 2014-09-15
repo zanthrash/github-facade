@@ -3,26 +3,24 @@ package com.zanthrash.services
 import com.fasterxml.jackson.core.JsonParseException
 import com.fasterxml.jackson.databind.JsonMappingException
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.zanthrash.config.GitHubProperties
 import com.zanthrash.domain.GitHubError
+import com.zanthrash.domain.PullRequest
 import com.zanthrash.domain.Repo
 import com.zanthrash.utils.EndpointFactory
 import com.zanthrash.utils.RestUtil
 import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.HttpEntity
-import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpMethod
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
+import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.client.RestTemplate
-import org.springframework.web.util.UriComponents
-import org.springframework.web.util.UriComponentsBuilder
-
+import rx.Observable
+/**
+ * Created by zanthrash on 9/15/14.
+ */
 @Service
 @Slf4j
-class OrganizationService {
+class PullRequestService {
 
     @Autowired
     RestTemplate restTemplate
@@ -33,32 +31,36 @@ class OrganizationService {
     @Autowired
     ObjectMapper objectMapper
 
-    List getRepos(String organizationName) {
-        URI endpoint = endpointFactory.organizationRepoURL(organizationName)
+    public List<Repo> fetchPullRequestForRepos(List<Repo> repos) {
 
-        ResponseEntity<String> response = restTemplate.getForEntity(
-                endpoint,
-                String.class,
-        )
+        for(Repo repo in repos) {
+            URI endpoint = endpointFactory.pullRequestsForRepo(repo)
 
-        return mapResponeEntityToObjects(response)
+            ResponseEntity<String> response = restTemplate.getForEntity(
+                    endpoint,
+                    String.class
+            )
+
+            mapResponeEntityToObjects(response, repo)
+        }
+
+        repos
 
     }
 
-    List mapResponeEntityToObjects(ResponseEntity<String> response) {
+    void mapResponeEntityToObjects(ResponseEntity<String> response, Repo repo) {
         String body = response.getBody()
         try {
             if(RestUtil.hasError(response.statusCode)) {
                 GitHubError error = objectMapper.readValue(body, GitHubError.class)
-                return [error]
+                log.error("GitHub error: fetching pull requests for org: {}, repo: {}", repo.owner.login, repo.name)
             } else {
-                Repo[] repos = objectMapper.readValue(body, Repo[].class)
-                return repos.toList()
+                PullRequest[] pullRequests = objectMapper.readValue(body, PullRequest[].class)
+                repo.pullRequests = pullRequests.toList()
             }
         } catch (IOException | JsonParseException | JsonMappingException ex) {
             log.warn('Issue marshaling JSON to Objects', ex)
         }
     }
-
 
 }
