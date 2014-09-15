@@ -15,9 +15,8 @@ class OrganizationController {
     @Autowired
     OrganizationService organizationService
 
-
     @RequestMapping('/org/{organization_name}/repos')
-    def reposByPR( @PathVariable('organization_name') String organizationName ) {
+    def reposRankedByPullRequest( @PathVariable('organization_name') String organizationName ) {
         organizationService.getRepos(organizationName)
     }
 }
