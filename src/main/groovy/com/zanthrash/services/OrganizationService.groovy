@@ -1,23 +1,20 @@
 package com.zanthrash.services
 
+import com.fasterxml.jackson.core.JsonParseException
+import com.fasterxml.jackson.databind.JsonMappingException
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.zanthrash.config.GitHubProperties
 import com.zanthrash.domain.GitHubError
 import com.zanthrash.domain.Repo
 import com.zanthrash.utils.EndpointFactory
 import com.zanthrash.utils.RestUtil
+import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.HttpEntity
-import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpMethod
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.client.RestTemplate
-import org.springframework.web.util.UriComponents
-import org.springframework.web.util.UriComponentsBuilder
 
 @Service
+@Slf4j
 class OrganizationService {
 
     @Autowired
@@ -51,8 +48,8 @@ class OrganizationService {
                 Repo[] repos = objectMapper.readValue(body, Repo[].class)
                 return repos.toList()
             }
-        } catch (IOException ex) {
-            throw new RuntimeException()
+        } catch (IOException | JsonParseException | JsonMappingException ex) {
+            log.warn('Issue marshaling JSON to Objects', ex)
         }
     }
 
