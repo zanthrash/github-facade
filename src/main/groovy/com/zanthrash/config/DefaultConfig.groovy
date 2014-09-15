@@ -1,5 +1,6 @@
 package com.zanthrash.config
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -13,10 +14,14 @@ class DefaultConfig {
     @Autowired
     GitHubAuthenticationInterceptor gitHubAuthenticationInterceptor
 
+    @Autowired
+    GitHubErrorHandler gitHubErrorHandler
+
     @Bean
     public RestTemplate restTemplate() {
         RestTemplate template = new RestTemplate(clientHttpRequestFactory())
         template.setInterceptors([gitHubAuthenticationInterceptor])
+        template.setErrorHandler(gitHubErrorHandler)
         template
     }
 
@@ -26,5 +31,10 @@ class DefaultConfig {
         factory.setReadTimeout(5000)
         factory.setConnectTimeout(5000)
         factory
+    }
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        new ObjectMapper()
     }
 }
