@@ -20,7 +20,6 @@ class EndpointFactorySpec extends Specification {
             URI endpoint = endpointFactory.organizationRepoURL('netflix')
         then:
              endpoint.toString() == 'https://api.github.com/orgs/netflix/repos'
-
     }
 
     def "create the github uri to fetch pull requests for a organizations repo"() {
