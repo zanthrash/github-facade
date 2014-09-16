@@ -22,7 +22,7 @@ class ReactiveService {
     def void getTopPullRequests(String orgName, DeferredResult<List> deferredResult) {
 
         organizationService
-            .getObservableRepos(orgName)
+            .getRepos(orgName)
             .flatMap({Map repo ->
                 pullRequestService.fetchPullRequstsForOrganizationAndRepo(repo.owner.login, repo.name)
                     .flatMap({List pulls ->

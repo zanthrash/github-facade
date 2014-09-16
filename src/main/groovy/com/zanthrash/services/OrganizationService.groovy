@@ -33,7 +33,7 @@ class OrganizationService {
     @Autowired
     CloseableHttpAsyncClient closeableHttpAsyncClient
 
-    Observable getObservableRepos(String organizationName) {
+    Observable getRepos(String organizationName) {
         URI endpoint = endpointFactory.organizationRepoURL(organizationName)
 
         return ObservableHttp
