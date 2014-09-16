@@ -18,12 +18,12 @@ class EndpointFactory {
         uriComponents.toUri()
     }
 
-    public URI pullRequestsForRepo(Repo repo) {
+    public URI pullRequestsForRepo(String orgName, String repoName) {
         UriComponents uriComponents = UriComponentsBuilder.newInstance()
             .scheme("https")
             .host("api.github.com")
             .path("repos/{orgName}/{repoName}/pulls")
-            .buildAndExpand(repo.owner.login, repo.name)
+            .buildAndExpand(orgName, repoName)
 
         uriComponents.toUri()
     }

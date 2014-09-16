@@ -8,5 +8,9 @@ import groovy.transform.ToString
 class Repo {
     Owner owner
     String name
-    List<PullRequest> pullRequests
+    List pullRequests = []
+
+    void addPullRequest(PullRequest pullRequest) {
+       pullRequests << pullRequests
+    }
 }

@@ -18,8 +18,8 @@ jar {
     baseName = 'github-facade'
     version = '0.0.1-SNAPSHOT'
 }
-sourceCompatibility = 1.6
-targetCompatibility = 1.6
+//sourceCompatibility = 1.6
+//targetCompatibility = 1.6
 
 repositories {
     mavenCentral()
@@ -35,6 +35,8 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-data-rest")
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("org.codehaus.groovy:groovy")
+    compile("com.netflix.rxjava:rxjava-groovy:0.20.4")
+    compile("com.netflix.rxjava:rxjava-apache-http:0.19.6")
 
     runtime("org.apache.httpcomponents:httpclient:4.3.2")
 
