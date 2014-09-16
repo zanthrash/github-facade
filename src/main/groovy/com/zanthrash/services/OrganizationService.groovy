@@ -28,28 +28,10 @@ import java.util.concurrent.TimeUnit
 class OrganizationService {
 
     @Autowired
-    RestTemplate restTemplate
-
-    @Autowired
     EndpointFactory endpointFactory
 
     @Autowired
-    ObjectMapper objectMapper
-
-    @Autowired
     CloseableHttpAsyncClient closeableHttpAsyncClient
-
-    List getRepos(String organizationName) {
-        URI endpoint = endpointFactory.organizationRepoURL(organizationName)
-
-        ResponseEntity<String> response = restTemplate.getForEntity(
-                endpoint,
-                String.class,
-        )
-
-        return mapResponeEntityToObjects(response)
-
-    }
 
     Observable getObservableRepos(String organizationName) {
         URI endpoint = endpointFactory.organizationRepoURL(organizationName)
@@ -60,38 +42,17 @@ class OrganizationService {
                 .flatMap({ ObservableHttpResponse response ->
                     return response.getContent().map({ body ->
                         String bodyAsString = new String(body)
-                        log.info "response body: {}", bodyAsString
-
-//                        Repo[] repos = objectMapper.readValue(bodyAsString, Repo[].class)
                         List repos = new JsonSlurper().parseText(bodyAsString)
-
-                        log.info "repos as ArrayList: {}", repos
                         return repos
                     })
                 })
                 .flatMap({ List repos ->
-                    log.info("Orgs Repo List: {}", repos)
                     Observable.from(repos)
                 })
                 .map({ Map repo ->
                     repo.subMap('name', 'owner')
                 })
 
-    }
-
-    List mapResponeEntityToObjects(ResponseEntity<String> response) {
-        String body = response.getBody()
-        try {
-            if(RestUtil.hasError(response.statusCode)) {
-                GitHubError error = objectMapper.readValue(body, GitHubError.class)
-                return [error]
-            } else {
-                Repo[] repos = objectMapper.readValue(body, Repo[].class)
-                return repos.toList()
-            }
-        } catch (IOException | JsonParseException | JsonMappingException ex) {
-            log.warn('Issue marshaling JSON to Objects', ex)
-        }
     }
 
 

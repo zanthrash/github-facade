@@ -23,28 +23,7 @@ class ReactiveService {
     @Autowired
     PullRequestService pullRequestService
 
-
-//    def Observable getTopPullRequests(String orgName) {
-//        return organizationService
-//            .getObservableRepos(orgName)
-//            .flatMap({Repo repo ->
-//                pullRequestService
-//                    .fetchObservablePullRequstsForRepo(repo)
-//                    .flatMap({ List pr ->
-//                        repo.pullRequests = pr
-//                        Observable.just(repo)
-//                    })
-//            })
-//            .toSortedList({ Repo a, Repo b ->
-//                b.pullRequests.size() <=> a.pullRequests.size()
-//            })
-//
-//    }
-
     def void getTopPullRequests(String orgName, DeferredResult<List> deferredResult) {
-//            pullRequestService.fetchObservablePullRequstsForRepo('netflix', 'asgard').subscribe({List pulls ->
-//                deferredResult.setResult(pulls)
-//            })
 
         organizationService
                 .getObservableRepos(orgName)

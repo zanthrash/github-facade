@@ -21,19 +21,7 @@ import java.util.concurrent.Callable
 class OrganizationController {
 
     @Autowired
-    OrganizationService organizationService
-
-    @Autowired
-    PullRequestService pullRequestService
-
-    @Autowired
     ReactiveService reactiveService
-
-    @RequestMapping('/foo')
-    def foo() {
-        List repos = organizationService.getRepos(organizationName)
-        pullRequestService.fetchPullRequestForRepos(repos)
-    }
 
     @RequestMapping('/org/{organization_name}/repos')
     def reposRankedByPullRequest( @PathVariable('organization_name') String organizationName ) {
