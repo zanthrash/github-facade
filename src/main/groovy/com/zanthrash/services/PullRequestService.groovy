@@ -22,33 +22,33 @@ class PullRequestService {
     CloseableHttpAsyncClient closeableHttpAsyncClient
 
 
-    public Observable fetchObservablePullRequstsForRepo(String orgName, String repoName) {
+    public Observable fetchPullRequstsForOrganizationAndRepo(String orgName, String repoName) {
 
         URI endpoint = endpointFactory.pullRequestsForRepo(orgName, repoName)
 
         return ObservableHttp
-                .createRequest(HttpAsyncMethods.createGet(endpoint), closeableHttpAsyncClient)
-                .toObservable()
-                .flatMap({ ObservableHttpResponse response ->
-                    return response.getContent().map({ body ->
-                        String bodyAsString = new String(body)
-                        List pullRequests = new JsonSlurper().parseText(bodyAsString)
-                        return pullRequests.size() > 0 ? pullRequests : [[:]]
-                    })
+            .createRequest(HttpAsyncMethods.createGet(endpoint), closeableHttpAsyncClient)
+            .toObservable()
+            .flatMap({ ObservableHttpResponse response ->
+                return response.getContent().map({ body ->
+                    String bodyAsString = new String(body)
+                    List pullRequests = new JsonSlurper().parseText(bodyAsString)
+                    return pullRequests.size() > 0 ? pullRequests : [[:]]
                 })
-                .flatMap({ List pullRequests ->
-                    Observable.from(pullRequests)
-                })
-                .map({Map pull ->
-                    if(pull.keySet().size() > 0) {
-                        Map base = pull.base
-                        Map repo = base.repo
-                        Map sub = pull.subMap('title', 'state', 'number', 'html_url')
-                        sub['repo_name'] = repo.name
-                        return sub
-                    }
-                })
-                .toList()
+            })
+            .flatMap({ List pullRequests ->
+                Observable.from(pullRequests)
+            })
+            .map({Map pull ->
+                if(pull.keySet().size() > 0) {
+                    Map base = pull.base
+                    Map repo = base.repo
+                    Map sub = pull.subMap('title', 'state', 'number', 'html_url')
+                    sub['repo_name'] = repo.name
+                    return sub
+                }
+            })
+            .toList()
 
     }
 
