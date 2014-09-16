@@ -52,10 +52,16 @@ class ReactiveService {
                     pullRequestService.fetchObservablePullRequstsForRepo(repo.owner.login, repo.name)
                         .flatMap({List pulls ->
                             repo['pull_requests'] = pulls
-                            log.info "Suckit : {}", repo
                             return Observable.from(repo)
                         })
                 })
+                .toSortedList({ Map a, Map b ->
+                    b.pull_requests?.size() <=> a.pull_requests?.size()
+                })
+                .flatMap({List repos ->
+                    Observable.from(repos)
+                })
+                .take(5)
                 .toList()
                 .subscribe({ List repo ->
                     deferredResult.setResult(repo)
