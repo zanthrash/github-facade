@@ -7,19 +7,19 @@ buildscript {
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath 'net.saliman:gradle-cobertura-plugin:2.2.4'
     }
 }
 
 apply plugin: 'groovy'
 apply plugin: 'idea'
-apply plugin: 'spring-boot' 
+apply plugin: 'spring-boot'
+apply plugin: 'cobertura'
 
 jar {
     baseName = 'github-facade'
     version = '0.0.1-SNAPSHOT'
 }
-//sourceCompatibility = 1.6
-//targetCompatibility = 1.6
 
 repositories {
     mavenCentral()
@@ -31,10 +31,6 @@ repositories {
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-aop")
     compile("org.springframework.boot:spring-boot-starter-web")
-//    compile("org.springframework.boot:spring-boot-starter-websocket")
-//    compile("org.springframework.boot:spring-boot-starter-data-rest")
-//    compile("org.springframework.boot:spring-boot-starter-actuator")
-//    compile("org.codehaus.groovy:groovy")
     compile("com.netflix.rxjava:rxjava-groovy:0.20.4")
     compile("com.netflix.rxjava:rxjava-apache-http:0.19.6")
 
@@ -44,7 +40,6 @@ dependencies {
     testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
     testCompile 'org.springframework:spring-test'
     testCompile 'org.spockframework:spock-spring:0.7-groovy-2.0'
-
 }
 
 
