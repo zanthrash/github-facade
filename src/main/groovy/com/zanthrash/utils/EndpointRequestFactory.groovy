@@ -4,5 +4,7 @@ import rx.Observable
 
 interface EndpointRequestFactory {
 
-    public Observable createGetRequstToFetchRepos(URI endpoint)
+    public Observable createGetRequestToFetchRepos(URI endpoint)
+
+    public Observable createGetRequestToFetchPullRequests(URI endpoint)
 }

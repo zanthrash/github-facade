@@ -24,7 +24,7 @@ class ReactiveService {
         organizationService
             .getRepos(orgName)
             .flatMap({Map repo ->
-                pullRequestService.fetchPullRequstsForOrganizationAndRepo(repo.owner.login, repo.name)
+                pullRequestService.fetchPullRequestsForOrganizationAndRepo(repo.owner.login, repo.name)
                     .flatMap({List pulls ->
                         repo['pull_requests'] = pulls
                         return Observable.from(repo)

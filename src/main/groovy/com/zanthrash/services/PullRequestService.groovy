@@ -1,6 +1,7 @@
 package com.zanthrash.services
 
 import com.zanthrash.utils.EndpointFactory
+import com.zanthrash.utils.EndpointRequestFactory
 import groovy.json.JsonSlurper
 import groovy.util.logging.Slf4j
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient
@@ -19,16 +20,13 @@ class PullRequestService {
     EndpointFactory endpointFactory
 
     @Autowired
-    CloseableHttpAsyncClient closeableHttpAsyncClient
+    EndpointRequestFactory endpointRequestFactory
 
-
-    public Observable fetchPullRequstsForOrganizationAndRepo(String orgName, String repoName) {
+    public Observable fetchPullRequestsForOrganizationAndRepo(String orgName, String repoName) {
 
         URI endpoint = endpointFactory.pullRequestsForRepo(orgName, repoName)
 
-        return ObservableHttp
-            .createRequest(HttpAsyncMethods.createGet(endpoint), closeableHttpAsyncClient)
-            .toObservable()
+        return endpointRequestFactory.createGetRequestToFetchPullRequests(endpoint)
             .flatMap({ ObservableHttpResponse response ->
                 return response.getContent().map({ body ->
                     String bodyAsString = new String(body)
@@ -49,7 +47,6 @@ class PullRequestService {
                 }
             })
             .toList()
-
     }
 
 

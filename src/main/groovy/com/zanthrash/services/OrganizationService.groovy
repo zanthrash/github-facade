@@ -22,7 +22,7 @@ class OrganizationService {
     Observable getRepos(String organizationName) {
         URI endpoint = endpointFactory.organizationRepoURL(organizationName)
 
-        return endpointRequestFactory.createGetRequstToFetchRepos(endpoint)
+        return endpointRequestFactory.createGetRequestToFetchRepos(endpoint)
                 .flatMap({ ObservableHttpResponse response ->
                     return response.getContent().map({ body ->
                         String bodyAsString = new String(body)

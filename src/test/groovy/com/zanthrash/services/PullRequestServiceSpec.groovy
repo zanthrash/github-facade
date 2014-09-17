@@ -1,92 +1,50 @@
 package com.zanthrash.services
 
 import com.zanthrash.Application
-import com.zanthrash.domain.GitHubError
-import groovy.json.JsonBuilder
+import com.zanthrash.config.TestConfig
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.SpringApplicationContextLoader
-import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
 import org.springframework.test.context.ContextConfiguration
-import org.springframework.test.web.client.MockRestServiceServer
-import org.springframework.web.client.RestTemplate
 import spock.lang.Specification
+import rx.Observable
 
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo
-import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus
-import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess
-
-@ContextConfiguration(classes = Application.class, loader = SpringApplicationContextLoader.class)
+@ContextConfiguration(classes = [Application.class, TestConfig.class ], loader = SpringApplicationContextLoader.class)
 class PullRequestServiceSpec extends Specification {
 
     @Autowired
-    RestTemplate restTemplate
+    PullRequestService service
 
-    @Autowired
-    OrganizationService service
+    def "get a list of pull requests for a valid organization repo"() {
 
-    MockRestServiceServer mockGitHub
+        given: "a valid organization name"
+            String orgName = 'netfilx'
+            String repoName = 'asgard'
 
-    def setup() {
-        mockGitHub = MockRestServiceServer.createServer(restTemplate)
-    }
+        when: "the service is called an Observable object is returned"
+            List results = []
+            Observable observable = service.fetchPullRequestsForOrganizationAndRepo(orgName, repoName)
 
-    def "successfully fetch a list of repos for a given organization and marshal the JSON to objects "() {
+        and: "to get the results of the observable we must call the subscribe method"
+            observable
+                .subscribe({ List processedPulls ->
+                    results = processedPulls
+                })
 
-        given: "have a organization we want to search for"
-            String organizationName = 'netflix'
+        then: 'size should be 5 (per the whats setup in MockEndpointRequestFactory)'
+            results.size() == 5
 
-        and: "create our fake response of 5 repos"
-            List repos = []
-            5.times { repos << [name: "repo_$it", owner:[login: organizationName]]}
-            def expectedJson = new JsonBuilder(repos)
+        and: "each map should contain these keys"
+            results.each { Map repo ->
+                assert repo.containsKey('title')
+                assert repo.containsKey('state')
+                assert repo.containsKey('number')
+                assert repo.containsKey('html_url')
+                assert repo.containsKey('repo_name')
+            }
 
-
-        and: "wire up the fake backend service"
-            mockGitHub
-                .expect(requestTo("https://api.github.com/orgs/$organizationName/repos"))
-                .andRespond(withSuccess(expectedJson.toString(), MediaType.APPLICATION_JSON))
-
-        when:
-            rx.Observable observable = service.getRepos(organizationName)
-
-
-        then:
-            observable.subscribe({List expected ->
-                assert expected instanceof List
-            })
-//        then: "the expected number of records come back"
-//            results.size() == 5
-//
-//        and: "ensure the service marshals the data into the correct object"
-//            results.every { it instanceof Repo }
-//
-//        and: "every repo is for has the correct owner"
-//            results.every { Repo repo ->
-//                repo.owner.login == organizationName
-//            }
-
-    }
-
-    def "attempt to fetch a list of repos for a organizaton that dosn't exist"() {
-        given: "bad org name"
-            String organizationName = "bad_fake_org_name"
-
-        and: "set the expected error message"
-            JsonBuilder expectedJson = new JsonBuilder([message:"Not Found"])
-        and: "set up the fake backend service"
-
-            mockGitHub
-                .expect(requestTo("https://api.github.com/orgs/$organizationName/repos"))
-                .andRespond(withStatus(HttpStatus.NOT_FOUND).body(expectedJson.toString()))
-
-        when:
-            def results = service.getRepos(organizationName)
-
-        then: "should return 1 error message"
-            results.size() == 1
-            GitHubError error = (GitHubError)results.first()
-            error.message == "Not Found"
-
+        and: "only these keys"
+            results.each {Map repo ->
+                assert repo.every {entity -> ['title', 'state', 'number', 'html_url', 'repo_name'].contains(entity.key)}
+            }
     }
 }

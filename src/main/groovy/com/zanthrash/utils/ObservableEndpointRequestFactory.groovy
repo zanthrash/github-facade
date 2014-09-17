@@ -14,9 +14,19 @@ class ObservableEndpointRequestFactory implements EndpointRequestFactory{
     CloseableHttpAsyncClient closeableHttpAsyncClient
 
     @Override
-    public Observable createGetRequstToFetchRepos(URI endpoint) {
+    public Observable createGetRequestToFetchRepos(URI endpoint) {
+        createObservableAsyncGetRequest(endpoint)
+    }
+
+    @Override
+    public Observable createGetRequestToFetchPullRequests(URI endpoint) {
+        createObservableAsyncGetRequest(endpoint)
+    }
+
+    private Observable createObservableAsyncGetRequest(URI endpoint) {
         return ObservableHttp
                 .createRequest( HttpAsyncMethods.createGet(endpoint), closeableHttpAsyncClient )
                 .toObservable()
+
     }
 }
