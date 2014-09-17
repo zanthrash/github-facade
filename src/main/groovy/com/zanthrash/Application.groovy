@@ -1,5 +1,6 @@
 package com.zanthrash
 
+import groovy.json.JsonSlurper
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.context.annotation.ComponentScan
@@ -15,6 +16,8 @@ class Application {
     static void main(String[] args) {
         SpringApplication.run Application, args
 
-        println("Dig it")
+        String body =   new URL("https://api.github.com/rate_limit").text
+        Map json = new JsonSlurper().parseText(body)
+        println("Remaing API calls: ${json.rate.remaining}")
     }
 }

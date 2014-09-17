@@ -1,12 +1,12 @@
 package com.zanthrash.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.apache.http.Header
+import com.zanthrash.utils.EndpointRequestFactory
+import com.zanthrash.utils.ObservableEndpointRequestFactory
 import org.apache.http.HttpRequestInterceptor
 import org.apache.http.client.config.RequestConfig
 import org.apache.http.client.protocol.RequestDefaultHeaders
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient
-import org.apache.http.impl.nio.client.HttpAsyncClientBuilder
 import org.apache.http.impl.nio.client.HttpAsyncClients
 import org.apache.http.message.BasicHeader
 import org.springframework.beans.factory.annotation.Autowired
@@ -15,11 +15,6 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.http.client.ClientHttpRequestFactory
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory
 import org.springframework.web.client.RestTemplate
-
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.LinkedBlockingQueue
-import java.util.concurrent.ThreadPoolExecutor
-import java.util.concurrent.TimeUnit
 
 @Configuration
 class DefaultConfig {
@@ -80,7 +75,8 @@ class DefaultConfig {
     }
 
     @Bean
-    public ExecutorService executorService() {
-        new ThreadPoolExecutor(4, 4, 1, TimeUnit.MINUTES, new LinkedBlockingQueue<Runnable>())
+    public EndpointRequestFactory endpointRequestFactory() {
+        new ObservableEndpointRequestFactory()
     }
+
 }

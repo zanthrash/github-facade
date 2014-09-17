@@ -31,10 +31,10 @@ repositories {
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-aop")
     compile("org.springframework.boot:spring-boot-starter-web")
-    compile("org.springframework.boot:spring-boot-starter-websocket")
-    compile("org.springframework.boot:spring-boot-starter-data-rest")
-    compile("org.springframework.boot:spring-boot-starter-actuator")
-    compile("org.codehaus.groovy:groovy")
+//    compile("org.springframework.boot:spring-boot-starter-websocket")
+//    compile("org.springframework.boot:spring-boot-starter-data-rest")
+//    compile("org.springframework.boot:spring-boot-starter-actuator")
+//    compile("org.codehaus.groovy:groovy")
     compile("com.netflix.rxjava:rxjava-groovy:0.20.4")
     compile("com.netflix.rxjava:rxjava-apache-http:0.19.6")
 
