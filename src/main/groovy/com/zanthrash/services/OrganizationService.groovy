@@ -24,6 +24,7 @@ class OrganizationService {
 
         return endpointRequestFactory.createGetRequestToFetchRepos(endpoint)
                 .flatMap({ ObservableHttpResponse response ->
+                    log.info("Rate Limit Remaining: {}",response?.getResponse()?.getHeaders('X-RateLimit-Remaining'))
                     return response.getContent().map({ body ->
                         String bodyAsString = new String(body)
                         log.info "Body: {}", bodyAsString
