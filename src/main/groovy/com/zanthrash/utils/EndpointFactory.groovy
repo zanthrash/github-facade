@@ -1,6 +1,5 @@
 package com.zanthrash.utils
 
-import com.zanthrash.domain.Repo
 import org.springframework.stereotype.Component
 import org.springframework.web.util.UriComponents
 import org.springframework.web.util.UriComponentsBuilder

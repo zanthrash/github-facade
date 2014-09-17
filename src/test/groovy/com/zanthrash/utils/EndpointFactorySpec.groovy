@@ -1,13 +1,10 @@
 package com.zanthrash.utils
 
 import com.zanthrash.Application
-import com.zanthrash.domain.Owner
-import com.zanthrash.domain.Repo
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.SpringApplicationContextLoader
 import org.springframework.test.context.ContextConfiguration
 import spock.lang.Specification
-
 
 @ContextConfiguration(classes = Application.class, loader = SpringApplicationContextLoader.class)
 class EndpointFactorySpec extends Specification {
