@@ -23,13 +23,8 @@ class EndpointFactorySpec extends Specification {
     }
 
     def "create the github uri to fetch pull requests for a organizations repo"() {
-        given: "we have a valid repo"
-            Repo repo = new Repo(
-                    name: 'testRepo',
-                    owner: new Owner(login: 'netflix')
-            )
         when: "create the endpoint"
-            URI endpoint = endpointFactory.pullRequestsForRepo(repo)
+            URI endpoint = endpointFactory.pullRequestsForRepo('netflix', 'testRepo' )
         then:
             endpoint.toString() == 'https://api.github.com/repos/netflix/testRepo/pulls'
     }
