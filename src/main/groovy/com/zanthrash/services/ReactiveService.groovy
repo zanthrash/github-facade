@@ -23,8 +23,10 @@ class ReactiveService {
 
         organizationService
             .getRepos(orgName)
+            .onErrorResumeNext(Observable.empty())
             .flatMap({Map repo ->
                 pullRequestService.fetchPullRequestsForOrganizationAndRepo(repo.owner.login, repo.name)
+                    .onErrorResumeNext(Observable.empty())
                     .flatMap({List pulls ->
                         repo['pull_requests'] = pulls
                         return Observable.from(repo)
@@ -39,7 +41,13 @@ class ReactiveService {
             .take(5)
             .toList()
             .subscribe({ List repo ->
-                deferredResult.setResult(repo)
+                if(repo) {
+                    deferredResult.setResult(repo)
+                } else {
+                    List message = [[message: "No results found for organization: $orgName".toString()]]
+                    deferredResult.setResult(message)
+                }
+
             })
 
     }
