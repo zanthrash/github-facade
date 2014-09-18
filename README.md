@@ -2,7 +2,7 @@
 
 ## Scope
 
-Create a RESTful facade around the GitHub API for the purposes of featching the top 5 repos for and organization based on the number of pull requests the repo has.
+Create a RESTful facade around the GitHub API for the purposes of featching the top 5 repos for an organization based on the number of pull requests the repo has.
 
 
 
