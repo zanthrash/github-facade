@@ -44,6 +44,19 @@ dependencies {
 
 }
 
+defaultTasks 'build', 'copyConfig'
+
+task copyConfig(type:Copy) {
+    File configFile = new File('build/libs/application.yml')
+    if(!configFile.exists()) {
+        from('src/main/resources') {
+            include "application.yml"
+        }
+        into('build/libs')
+    }
+}
+
+
 
 task wrapper(type: Wrapper) {
     gradleVersion = '1.12'
