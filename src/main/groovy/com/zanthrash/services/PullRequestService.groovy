@@ -31,7 +31,7 @@ class PullRequestService {
                 return response.getContent().map({ body ->
                     String bodyAsString = new String(body)
                     List pullRequests = new JsonSlurper().parseText(bodyAsString)
-                    return pullRequests.size() > 0 ? pullRequests : [[:]]
+                    return pullRequests.size() > 0 ? pullRequests : [[:]] //Hack for dealing w/ Rx and empty lists
                 })
             })
             .flatMap({ List pullRequests ->
