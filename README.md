@@ -68,8 +68,9 @@ $ ./gradlew
     
 
 
+## Technologies Used
 
-
-The purpose of the app is to crate a
-
+- Spring Boot (http://projects.spring.io/spring-boot)
+- RxJava / RxGroovy (https://github.com/ReactiveX/RxJava)
+- Spock (https://github.com/spockframework/spock)
 
