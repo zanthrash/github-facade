@@ -7,6 +7,7 @@ import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.context.request.async.DeferredResult
@@ -23,9 +24,13 @@ class OrganizationController {
         value = '/{organization_name}/repos',
         method = RequestMethod.GET
     )
-    def reposRankedByPullRequest( @PathVariable('organization_name') String organizationName ) {
+    def reposRankedByPullRequest(
+            @PathVariable('organization_name') String organizationName,
+            @RequestParam(value = 'top', defaultValue = '5', required = false ) Integer top
+    )
+    {
         final DeferredResult<List> deferredResult = new DeferredResult<>()
-        reactiveService.getTopPullRequests(organizationName, deferredResult)
+        reactiveService.getTopPullRequests(organizationName, deferredResult, top)
         deferredResult
     }
 

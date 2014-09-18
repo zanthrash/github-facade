@@ -19,7 +19,7 @@ class ReactiveService {
     @Autowired
     PullRequestService pullRequestService
 
-    def void getTopPullRequests(String orgName, DeferredResult<List> deferredResult) {
+    def void getTopPullRequests(String orgName, DeferredResult<List> deferredResult, Integer top = 5) {
 
         organizationService
             .getRepos(orgName)
@@ -38,7 +38,7 @@ class ReactiveService {
             .flatMap({List repos ->
                 Observable.from(repos)
             })
-            .take(5)
+            .take(top)
             .toList()
             .subscribe({ List repo ->
                 if(repo) {

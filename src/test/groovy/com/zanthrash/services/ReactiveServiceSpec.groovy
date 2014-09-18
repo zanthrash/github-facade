@@ -53,6 +53,39 @@ class ReactiveServiceSpec extends Specification {
 
     }
 
+    def "github returns 10 repos we only want 1"() {
+        given: "have a DeferredResponse to handle the async return value"
+            DeferredResult<List> deferredResult = new DeferredResult<List>()
+
+        and: "a valid org name"
+            String orgName = 'netflix'
+
+        and: "we only want the top 1"
+            Integer top = 1
+
+        and: "mock out 10 repos for a client"
+            repoTestDataBuilder
+                    .number(10)
+                    .orgName(orgName)
+                    .buildRepoJson()
+
+        and: "mock out pull requests"
+            pullRequestTestDataBuilder
+                    .number(1)
+                    .orgName(orgName)
+                    .buildJson()
+
+        when:
+            reactiveService.getTopPullRequests(orgName, deferredResult, top )
+
+        then: "check the deferred result"
+            deferredResult.hasResult()
+
+        and: "verify the list has 1 records"
+            List results = deferredResult.result
+            results.size() == 1
+
+    }
 
     def "github returns 3 repos we ask for top 5: should just get the 3"() {
         given: "have a DeferredResponse to handle the async return value"

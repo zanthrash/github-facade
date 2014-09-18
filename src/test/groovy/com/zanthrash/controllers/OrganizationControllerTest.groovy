@@ -39,15 +39,15 @@ class OrganizationControllerTest extends Specification {
         organizationController.reactiveService = mockReactiveService
     }
 
-    def "test the controllers calls with collaborators"() {
+    def "test the controllers calls with collaborators with default top count"() {
         given: "we have an valid org name"
             String orgName = 'netfilx'
-
+            Integer top = 5
         when:
-            DeferredResult<List> result = organizationController.reposRankedByPullRequest(orgName)
+            DeferredResult<List> result = organizationController.reposRankedByPullRequest(orgName, top )
 
         then:
-            1 * mockReactiveService.getTopPullRequests(orgName, _ as DeferredResult)
+            1 * mockReactiveService.getTopPullRequests(orgName, _ as DeferredResult, top)
             result != null
     }
 
