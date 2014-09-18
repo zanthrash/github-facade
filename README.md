@@ -25,7 +25,7 @@ git clone https://github.com/zanthrash/github-facade.git
 $ ./gradlew runBuild 
 ```
 
-GitHub has places a 60 calls per hour rate limit on all non authenticate API calls.  
+GitHub has placed a 60 calls per hour rate limit on all non authenticate API calls.  
 Running unauthenticated will work but you will quickly bump your head on the limit
 
 #### Authenticated
@@ -72,7 +72,7 @@ $ ./gradlew runBuild -PapiKey=your_token_here
 
 ### Unit Tests
 
-Running the **buildRun** task will generate test a test report located at **{projectDir}/build/reports/tests/index.html**
+Running the **buildRun** task will generate a test report located at **{projectDir}/build/reports/tests/index.html**
 
 ### Code Coverage
 
