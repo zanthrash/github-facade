@@ -8,6 +8,8 @@
 git clone https://github.com/zanthrash/github-facade.git
 ```
 
-### 2. Build the project with Gradle
+### 2. Build and Run the project with Gradle
 
+```
+ ./gradlew runBuild 
 ```

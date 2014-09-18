@@ -12,9 +12,13 @@ buildscript {
 }
 
 apply plugin: 'groovy'
+apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
 apply plugin: 'cobertura'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
 
 jar {
     baseName = 'github-facade'
@@ -44,19 +48,28 @@ dependencies {
 
 }
 
-defaultTasks 'build', 'copyConfig'
+defaultTasks 'copyConfig'
 
-task copyConfig(type:Copy) {
+task copyConfig(dependsOn:build, type:Copy) {
     File configFile = new File('build/libs/application.yml')
     if(!configFile.exists()) {
         from('src/main/resources') {
             include "application.yml"
         }
         into('build/libs')
+        println ":copying applications.yml to build dir"
     }
 }
 
+task runBuild(dependsOn:['copyConfig'] , type: Exec) {
+    String token = ""
+    if(project.hasProperty('apiKey')) {
+        token =  "--github.token=$apiKey".toString()
+    }
+    commandLine 'java', '-jar', 'build/libs/github-facade-0.0.1-SNAPSHOT.jar', token
+    println "********************** ${commandLine}"
 
+}
 
 task wrapper(type: Wrapper) {
     gradleVersion = '1.12'
