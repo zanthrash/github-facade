@@ -87,6 +87,36 @@ class ReactiveServiceSpec extends Specification {
 
     }
 
+    def "github returns 0 repos should get error message"() {
+        given: "have a DeferredResponse to handle the async return value"
+            DeferredResult<List> deferredResult = new DeferredResult<List>()
+
+        and: "a valid org name"
+            String orgName = 'netflix'
+
+        and: "we only want the top 1"
+            Integer top = 1
+
+        and: "mock out 10 repos for a client"
+            repoTestDataBuilder
+                    .number(0)
+                    .orgName(orgName)
+                    .buildRepoJson()
+
+        when:
+            reactiveService.getTopPullRequests(orgName, deferredResult, top )
+
+        then: "check the deferred result"
+            deferredResult.hasResult()
+
+        and: "verify the list has 1 records"
+            List results = deferredResult.result
+            results.size() == 1
+            results.first() == [message:"No results found for organization: $orgName"]
+
+    }
+
+
     def "github returns 3 repos we ask for top 5: should just get the 3"() {
         given: "have a DeferredResponse to handle the async return value"
             DeferredResult<List> deferredResult = new DeferredResult<List>()
