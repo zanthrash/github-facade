@@ -14,7 +14,11 @@ Create a RESTful facade around the GitHub API for the purposes of featching the 
 git clone https://github.com/zanthrash/github-facade.git
 ```
 
+
+
 ### 2. Build and Run the project with Gradle
+
+**NOTE: The needs to run against Java 1.7**
 
 #### Unauthenticated
 ```
