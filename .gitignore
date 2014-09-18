@@ -3,3 +3,5 @@ application.yml
 *.iml
 *.ipr
 *.iws
+.gradle/
+build/
