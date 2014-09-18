@@ -55,7 +55,6 @@ $ ./gradlew runBuild -PapiKey=your_token_here
     
     ```
     $ curl -H 'Accept: application/json' http://localhost:8080/org/netflix/repos | python -mjson.tool
-
     ```
     
     
