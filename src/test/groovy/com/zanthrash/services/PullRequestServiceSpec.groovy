@@ -2,6 +2,7 @@ package com.zanthrash.services
 
 import com.zanthrash.Application
 import com.zanthrash.config.TestConfig
+import com.zanthrash.utils.PullRequestTestDataBuilder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.SpringApplicationContextLoader
 import org.springframework.test.context.ContextConfiguration
@@ -14,11 +15,20 @@ class PullRequestServiceSpec extends Specification {
     @Autowired
     PullRequestService service
 
+    @Autowired
+    PullRequestTestDataBuilder pullRequestTestDataBuilder
+
     def "get a list of pull requests for a valid organization repo"() {
 
         given: "a valid organization name"
             String orgName = 'netfilx'
             String repoName = 'asgard'
+
+        and: "set up the expected json results"
+            pullRequestTestDataBuilder
+                .number(5)
+                .orgName(orgName)
+                .buildJson()
 
         when: "the service is called an Observable object is returned"
             List results = []

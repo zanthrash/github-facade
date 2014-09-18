@@ -12,4 +12,6 @@ class TestConfig {
     public EndpointRequestFactory endpointRequestFactory() {
         new MockEndpointRequestFactory()
     }
+
+
 }
