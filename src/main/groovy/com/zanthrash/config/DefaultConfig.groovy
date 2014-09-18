@@ -52,15 +52,27 @@ class DefaultConfig {
                 .setConnectTimeout(6000)
                 .build()
 
+
         final CloseableHttpAsyncClient httpclient = HttpAsyncClients.custom()
                 .setDefaultRequestConfig(requestConfig)
-                .setDefaultHeaders([new BasicHeader("Authorization", "token ${gitHubProperties.token}")])
+                .setDefaultHeaders(gitHubHeaders())
                 .setMaxConnPerRoute(20)
                 .setMaxConnTotal(50)
                 .build();
         httpclient.start();
         httpclient
     }
+
+    List<BasicHeader> gitHubHeaders() {
+        List<BasicHeader> headers = []
+
+        if(gitHubProperties.token) {
+            headers << new BasicHeader("Authorization", "token ${gitHubProperties.token}")
+        }
+
+        headers
+    }
+
 
 
     @Bean HttpRequestInterceptor createHttpRequestInterceptor() {
