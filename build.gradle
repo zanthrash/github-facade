@@ -66,7 +66,9 @@ task runBuild(dependsOn:['copyConfig'] , type: Exec) {
     if(project.hasProperty('apiKey')) {
         token =  "--github.token=$apiKey".toString()
     }
-    commandLine 'java', '-jar', 'build/libs/github-facade-0.0.1-SNAPSHOT.jar', token
+
+    workingDir 'build/libs'
+    commandLine 'java', '-jar', 'github-facade-0.0.1-SNAPSHOT.jar',  token
     println "********************** ${commandLine}"
 
 }
