@@ -59,9 +59,6 @@ and then you can just run the defaut gradle task to start the app
 $ ./gradlew runBuild
 ```
 
-
-
-
 3. Once the app is running navigate to:
 
     [http://localhost:8080/org/netflix/repo](http://localhost:8080/org/netflix/repos)
