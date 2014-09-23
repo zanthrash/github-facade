@@ -70,15 +70,14 @@ Once the app is running navigate to:
 [http://localhost:8080/org/netflix/repo](http://localhost:8080/org/netflix/repos)
     
 
-or you can use curl:
+or you can use curl **(OS X)**:
     
     
+```
+$ curl -H 'Accept: application/json' http://localhost:8080/org/netflix/repos | python -mjson.tool
 ```
 
-$ curl -H 'Accept: application/json' http://localhost:8080/org/netflix/repos | python -mjson.tool
-    
-```
-    
+**NOTE:** piping it into **python -mjson.tool** is not necessary -- it just pretty-prints the json    
     
 This call will get a list of the top 5 Netflix repos sorted in decending order by the number of pull reqests a repo has
 
