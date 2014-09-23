@@ -45,6 +45,22 @@ Autenticated API user can make 5000 calls per hour.
 $ ./gradlew runBuild -PapiKey=your_token_here
 ```
 
+Or if you do not like to have your API token in your command history you can add it to the
+
+```
+github.token
+```
+
+property in the application.yml file in the **build/libs**  directory
+
+and then you can just run the defaut gradle task to start the app
+
+```
+$ ./gradlew runBuild
+```
+
+
+
 
 3. Once the app is running navigate to:
 
