@@ -2,16 +2,18 @@ package com.zanthrash.services
 
 import com.zanthrash.Application
 import com.zanthrash.config.TestConfig
+import com.zanthrash.utils.CacheNames
 import com.zanthrash.utils.PullRequestTestDataBuilder
 import com.zanthrash.utils.RepoTestDataBuilder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.SpringApplicationContextLoader
+import org.springframework.cache.CacheManager
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.web.context.request.async.DeferredResult
 import spock.lang.Specification
 
 @ContextConfiguration(classes = [Application.class, TestConfig.class ], loader = SpringApplicationContextLoader.class)
-class ReactiveServiceSpec extends Specification {
+class ReactiveServiceNoCacheSpec extends Specification {
 
     @Autowired
     ReactiveService reactiveService
@@ -21,6 +23,13 @@ class ReactiveServiceSpec extends Specification {
 
     @Autowired
     PullRequestTestDataBuilder pullRequestTestDataBuilder
+
+    @Autowired
+    CacheManager cacheManager
+
+    def setup() {
+        cacheManager.getCache(CacheNames.ORG_REPOS_BY_PULL_REQUEST.name).clear()
+    }
 
     def "github returns 10 repos we only want 5"() {
         given: "have a DeferredResponse to handle the async return value"
