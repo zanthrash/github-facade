@@ -24,7 +24,7 @@ class DefaultConfig {
     GitHubProperties gitHubProperties
 
 
-    @Bean
+    @Bean(destroyMethod = "shutdown")
     public CloseableHttpAsyncClient closeableHttpAsyncClient() {
 
         final RequestConfig requestConfig = RequestConfig.custom()
