@@ -1,3 +1,4 @@
+*.log
 application.yml
 !src/**/application.yml
 *.iml
