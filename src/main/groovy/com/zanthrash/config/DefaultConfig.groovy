@@ -19,30 +19,10 @@ import org.springframework.web.client.RestTemplate
 @Configuration
 class DefaultConfig {
 
-    @Autowired
-    GitHubAuthenticationInterceptor gitHubAuthenticationInterceptor
-
-    @Autowired
-    GitHubErrorHandler gitHubErrorHandler
 
     @Autowired
     GitHubProperties gitHubProperties
 
-    @Bean
-    public RestTemplate restTemplate() {
-        RestTemplate template = new RestTemplate(clientHttpRequestFactory())
-        template.setInterceptors([gitHubAuthenticationInterceptor])
-        template.setErrorHandler(gitHubErrorHandler)
-        template
-    }
-
-    @Bean
-    public ClientHttpRequestFactory clientHttpRequestFactory() {
-        ClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory()
-        factory.setReadTimeout(5000)
-        factory.setConnectTimeout(5000)
-        factory
-    }
 
     @Bean
     public CloseableHttpAsyncClient closeableHttpAsyncClient() {
